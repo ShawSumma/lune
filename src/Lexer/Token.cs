@@ -22,7 +22,7 @@ namespace Lune.Lexer
         // Keywords
         And, Or, If, Else, For, In, While, Case, Of, Var, Proc,
 
-        EOF
+        NewLine, EOF
     }
 
     public class Token

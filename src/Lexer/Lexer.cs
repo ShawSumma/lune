@@ -15,6 +15,7 @@ namespace Lune.Lexer
     {
         private int start = 0, current = 0;
         private int line = 1;
+        private bool inCommentBlock;
 
         private readonly string source;
         private List<Token> tokens = new List<Token>();
@@ -83,7 +84,7 @@ namespace Lune.Lexer
 
         private void addToken(TokenType type, object? literal = null)
         {
-            Console.WriteLine($"start = {start}, current = {current}");
+            //Console.WriteLine($"start = {start}, current = {current}");
 
             var text = source.Substring(start, current - start);
             tokens.Add(new Token(type, "", literal, line));
@@ -149,6 +150,8 @@ namespace Lune.Lexer
             {
                 if (peek() == '\n')
                     line++;
+
+                advance();
             }
 
             if (isAtEnd())
@@ -161,11 +164,7 @@ namespace Lune.Lexer
             advance();
 
             // Remove the surrounding quotes
-            string value = source.Substring(start + 1, current - start - 1);
-
-            // FIXME: stuck in loop?
-            System.Console.WriteLine("str val is " + value);
-
+            string value = source.Substring(start + 1, current - start - 2);
             addToken(StringLit, value);
         }
 
@@ -196,26 +195,57 @@ namespace Lune.Lexer
                     // Ignore whitespace
                     break;
                 case '\n':
+                    // FIXME: Kinda works but it still appends NewLine even if the line is actually empty
+                    if (peek() != ' ' && tokens.Count == 0 || tokens[tokens.Count - 1].type != NewLine)
+                    {
+                        //System.Console.WriteLine($"'{peek()}' => {(int)peek()}");
+                        addToken(NewLine);
+                    }
                     line++;
                     break;
+                case '|':
+                    if (matches('#') && inCommentBlock)
+                    {
+                        WriteLine("exited a comment block");
+                        inCommentBlock = false;
+                    }
+                    break;
                 case '#':
-                    // TODO: Add Multiline comments which are between #| comment |#
+                    if (matches('|'))
+                    {
+                        // Multiline comment block
+                        inCommentBlock = true;
+                        WriteLine("entered a comment block");
+                    }
 
-                    // Ignore comments
-                    while (peek() != '\n' && !isAtEnd()) advance();
+                    if (!inCommentBlock)
+                    {
+                        while (peek() != '\n' && !isAtEnd()) advance();
+                        if (peek() == '\n') advance();
+                    }
+
                     break;
                 default:
-                    if (Char.IsDigit(c))
+                    if (!inCommentBlock)
                     {
-                        scanNumber();
-                    }
-                    else if (Char.IsLetter(c) || c == '_')
-                    {
-                        scanIdentifier();
+                        if (Char.IsDigit(c))
+                        {
+                            scanNumber();
+                        }
+                        else if (Char.IsLetter(c) || c == '_')
+                        {
+                            scanIdentifier();
+                        }
+                        else
+                        {
+                            Error(line, $"Unexpected character '{c}'");
+                        }
                     }
                     else
                     {
-                        Error(line, $"Unexpected character '{c}'");
+                        // Inside a comment block, we ignore everything
+                        while (peek() != '|' && peekNext() != '#' && !isAtEnd())
+                            advance();
                     }
                     break;
             }

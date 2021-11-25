@@ -2,7 +2,16 @@
 Since the language is in its infancy, this is highly subject to change!
 
 #### Comments:
-Comments begin with a `#` symbol like in Python, Nim etc.
+Comments begin with a `#` symbol like in Python, Nim etc. Lune also supports multiline comment blocks. You cannot nest comment blocks.
+
+```nim
+# A single line comment
+#|
+A multiline comment block
+that can 
+span many lines!
+|#
+```
 
 #### Identifiers:
 Identifiers are defined in `camelCase`. They can contain:
