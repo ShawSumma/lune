@@ -15,6 +15,12 @@ proc main() {
 }
 ```
 
+## Syntax Highlighting
+A *very* work in progress VS Code extension is provided under `tool/lune-vscode` which supports
+- basic syntax highlighting
+- commenting using `Ctrl+/` like any other language
+- smart brace folding
+
 ## Running
 ```sh
 % dotnet run

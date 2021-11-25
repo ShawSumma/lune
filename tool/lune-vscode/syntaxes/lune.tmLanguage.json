@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Lune",
+  "patterns": [
+    {
+      "include": "#types"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#comments"
+    }
+  ],
+  "repository": {
+    "types": {
+      "patterns": [
+        {
+          "name": "constant.numeric.lune",
+          "match": "(0x|0b)?[0-9]"
+        },
+        {
+          "name": "constant.string.lune",
+          "begin": "\"",
+          "end": "\""
+        },
+        {
+          "name": "constant.character.lune",
+          "match": "'.'"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.lune",
+          "match": "\\b(and|or|if|else|for|in|while|case|of|var|proc|ptr|return|str|int|char)\\b"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.lune",
+          "begin": "#",
+          "end": "\n"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.lune",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.lune",
+          "match": "\\\\."
+        }
+      ]
+    }
+  },
+  "scopeName": "source.lune"
+}

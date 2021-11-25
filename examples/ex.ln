@@ -1,20 +1,19 @@
 # for loop
 # does stuff
 # a comment
-var myVar = "hello world"
+var myVar : char = "hello world"
 
-var another = 123
-
-#|  imagine this is some complex thing and we want to
-    split it between lines |#
-var someCalculation =   \
-    ( 1 +               \
+var another : char = 123
+var someCalculation : int =     \
+    ( 1 +                       \
         (2 * 3))
 
-#|
-    Demonstration of how to loop. This function loops
-    through 0 to 10, and writes out the message "looping".
-|#
+#
+# Demonstration of how to loop. This function loops
+# through 0 to 10, and writes out the message "looping".
+#
+
+# a comment
 for i = mkRange(0, 10) {
     write("looping")
 }

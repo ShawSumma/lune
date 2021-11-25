@@ -1,0 +1,25 @@
+{
+    "name": "lune-vscode",
+    "displayName": "lune-vscode",
+    "description": "Basic syntax highlighting for Lune in VS Code",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.62.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "lune",
+            "aliases": ["Lune", "lune"],
+            "extensions": [".lune",".ln"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "lune",
+            "scopeName": "source.lune",
+            "path": "./syntaxes/lune.tmLanguage.json"
+        }]
+    }
+}
