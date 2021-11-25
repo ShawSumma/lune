@@ -2,7 +2,7 @@
 Small language that will eventually compile to C, or maybe machine code.
 
 Progress:
-- [ ] Lexing
+- [x] Lexing
 - [ ] Parsing
 - [ ] AST generation
 

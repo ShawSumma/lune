@@ -21,7 +21,7 @@ namespace Lune.Lexer
         Identifier, StringLit, NumberLit,
 
         // Keywords
-        If, Else, For, While, Var, Proc,
+        If, Else, For, In, While, Var, Proc,
 
         EOF
     }

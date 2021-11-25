@@ -19,14 +19,29 @@ namespace Lune.Lexer
         private readonly string source;
         private List<Token> tokens = new List<Token>();
 
+        // Mapping of reserved words and their tokens
+        private Dictionary<string, TokenType> reserved = new Dictionary<string, TokenType>();
+
         // Initializer
         public Lexer(string source)
         {
             this.source = source;
+
+            this.reserved = new Dictionary<string, TokenType>
+            {
+                ["if"] = If,
+                ["else"] = Else,
+                ["for"] = For,
+                ["in"] = TokenType.In,
+                ["while"] = While,
+                ["var"] = Var,
+                ["proc"] = Proc,
+            };
         }
 
         private bool isAtEnd() => current >= source.Length;
 
+        #region Helper functions
         private char advance()
         {
             Console.WriteLine($"start = {start}, current = {current}");
@@ -60,6 +75,7 @@ namespace Lune.Lexer
             current++;
             return true;
         }
+        #endregion
 
         private void addToken(TokenType type, object? literal = null)
         {
@@ -84,6 +100,26 @@ namespace Lune.Lexer
 
             tokens.Add(new Token(TokenType.EOF, "", null, line));
             return tokens;
+        }
+
+        private void scanIdentifier()
+        {
+            while (Char.IsLetterOrDigit(peek()) || matches('_'))
+                advance();
+
+            var identifier = source.Substring(start, current - start);
+
+
+            // Check if reserved keyword exists
+            if (reserved.ContainsKey(identifier))
+            {
+                var tokenType = reserved[identifier];
+                addToken(tokenType);
+            }
+            else
+            {
+                addToken(Identifier, identifier);
+            }
         }
 
         private void scanNumber()
@@ -146,6 +182,7 @@ namespace Lune.Lexer
                 case '>': addToken(matches('=') ? GreaterEqual : Greater); break;
                 case '"': scanString(); break;
                 case ' ':
+
                 case '\r':
                 case '\t':
                     // Ignore whitespace
@@ -153,10 +190,20 @@ namespace Lune.Lexer
                 case '\n':
                     line++;
                     break;
+                case '#':
+                    // TODO: Add Multiline comments which are between #| comment |#
+
+                    // Ignore comments
+                    while (peek() != '\n' && !isAtEnd()) advance();
+                    break;
                 default:
                     if (Char.IsDigit(c))
                     {
                         scanNumber();
+                    }
+                    else if (Char.IsLetter(c) || c == '_')
+                    {
+                        scanIdentifier();
                     }
                     else
                     {
