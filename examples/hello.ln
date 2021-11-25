@@ -1,0 +1,7 @@
+proc say_hello() {
+    write("Hello!")
+}
+
+proc say_goodbye() {
+    write("Goodbye!")
+}

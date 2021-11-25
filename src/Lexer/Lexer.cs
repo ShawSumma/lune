@@ -29,11 +29,15 @@ namespace Lune.Lexer
 
             this.reserved = new Dictionary<string, TokenType>
             {
+                ["and"] = And,
+                ["or"] = Or,
                 ["if"] = If,
                 ["else"] = Else,
                 ["for"] = For,
                 ["in"] = TokenType.In,
                 ["while"] = While,
+                ["case"] = Case,
+                ["of"] = Of,
                 ["var"] = Var,
                 ["proc"] = Proc,
             };
@@ -44,7 +48,7 @@ namespace Lune.Lexer
         #region Helper functions
         private char advance()
         {
-            Console.WriteLine($"start = {start}, current = {current}");
+            //Console.WriteLine($"start = {start}, current = {current}");
 
             if (!isAtEnd())
                 return source[current++];
@@ -158,6 +162,10 @@ namespace Lune.Lexer
 
             // Remove the surrounding quotes
             string value = source.Substring(start + 1, current - start - 1);
+
+            // FIXME: stuck in loop?
+            System.Console.WriteLine("str val is " + value);
+
             addToken(StringLit, value);
         }
 

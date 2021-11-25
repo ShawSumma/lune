@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Lune.Lexer
 {
     /// <summary>
@@ -9,9 +11,6 @@ namespace Lune.Lexer
         LeftParen, RightParen, LeftBrace, RightBrace,
         Comma, Dot, Plus, Minus, Star, Slash, Colon, Semicolon,
 
-        // One or two character tokens
-        And, Or,
-
         Bang, BangEqual,
         Equal, EqualEqual,
         Greater, GreaterEqual,
@@ -21,7 +20,7 @@ namespace Lune.Lexer
         Identifier, StringLit, NumberLit,
 
         // Keywords
-        If, Else, For, In, While, Var, Proc,
+        And, Or, If, Else, For, In, While, Case, Of, Var, Proc,
 
         EOF
     }
@@ -41,6 +40,17 @@ namespace Lune.Lexer
             this.line = line;
         }
 
-        public override string ToString() => $"{this.type} {this.lexeme} {this.literal}";
+        public override string ToString() 
+        {
+            var items = new List<object>();
+            if (this.lexeme != "") {
+                items.Add(this.lexeme.Trim());
+            }
+            else if (this.literal != null) {
+                items.Add(this.literal);
+            }
+
+            return $"{this.type}({string.Join(',', items)})";
+        }
     }
 }

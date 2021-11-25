@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Collections.Generic;
+
 using Lune.Lexer;
 
 namespace Lune
@@ -9,7 +12,8 @@ namespace Lune
 
         public static void Main(string[] args)
         {
-            lexer = new Lexer.Lexer("# a comment\nfor (x in y) { 5 * 4 }");
+            lexer = new Lexer.Lexer(File.ReadAllText("examples/ex.ln"));
+
             var tokens = lexer.Scan();
 
             foreach (var t in tokens)

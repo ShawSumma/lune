@@ -17,17 +17,29 @@ proc addTwo(a : int, b : int) {
 }
 
 proc say_hello() {
-    write("Hello!");
+    write("Hello!")
 }
 ```
 
 #### If and Else:
-Lune *may* have if expressions with the syntax `when (cond) { return_val }` later on,
-but for now I aim to keep the language small and simple.
+```nim
+if age >= 18 {
+    write("You are allowed to vote")
+} else {
+    write("You are not allowed to vote")
+}
+```
 
 ```nim
-if (age >= 18) {
-    write("You are allowed to vote");
-} else {
-    write("You are not allowed to vote");
-}```
+case some_value {
+    of first { 
+        # do something
+    }
+    of another {
+        # do another thing
+    }
+    else {
+        # do something else on fallback
+    }
+}
+```

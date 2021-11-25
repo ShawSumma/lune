@@ -8,10 +8,10 @@ Progress:
 
 ## Hello World
 ```nim
-var str message = "Hello world"; 
+var str message = "Hello world"
 
 proc main() {
-    write(message, "\n");
+    write(message, "\n")
 }
 ```
 

@@ -1,0 +1,27 @@
+# case
+case some_value {
+    of first { 
+        # do something
+    }
+    of another {
+        # do another thing
+    }
+    else {
+        # do something else on fallback
+    }
+}
+
+# if
+if something {
+    # FIX: string literals are broken
+    #write("a")
+    write(5)
+} else {
+
+}
+
+# for loop
+for i = 0, 10 {
+    write(5)
+}
+
