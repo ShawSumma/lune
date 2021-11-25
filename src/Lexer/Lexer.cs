@@ -104,6 +104,13 @@ namespace Lune.Lexer
             }
 
             tokens.Add(new Token(TokenType.EOF, "", null, line));
+
+            // As a kind of workaround to 01, check if the first token is a newline and remove it
+            if (tokens[0].type == NewLine)
+            {
+                tokens.Remove(tokens[0]);
+            }
+
             return tokens;
         }
 
@@ -188,6 +195,7 @@ namespace Lune.Lexer
                 case '<': addToken(matches('=') ? LessEqual : Less); break;
                 case '>': addToken(matches('=') ? GreaterEqual : Greater); break;
                 case '"': scanString(); break;
+                case '\\': break; // line continuation
                 case ' ':
 
                 case '\r':
@@ -195,13 +203,14 @@ namespace Lune.Lexer
                     // Ignore whitespace
                     break;
                 case '\n':
-                    // FIXME: Kinda works but it still appends NewLine even if the line is actually empty
-                    if (peek() != ' ' && tokens.Count == 0 || tokens[tokens.Count - 1].type != NewLine)
-                    {
-                        //System.Console.WriteLine($"'{peek()}' => {(int)peek()}");
-                        addToken(NewLine);
+                    if (peekNext(ahead: -2) != '\\') {
+                        // FIXME: 01: Kinda works but it still appends NewLine even if the line is actually empty
+                        if (peek() != ' ' && tokens.Count == 0 || tokens[tokens.Count - 1].type != NewLine)
+                        {
+                            addToken(NewLine);
+                        }
+                        line++;
                     }
-                    line++;
                     break;
                 case '|':
                     if (matches('#'))

@@ -16,7 +16,7 @@ namespace Lune
 
         private static void Report(int line, string where, string message)
         {
-            WriteLine($"error at L:{line}, {where}: {message}");
+            WriteLine($"error at L:{line}{(where != "" ? " [" + where + "]": "")}: {message}");
             ErrorReporting.HadError = true;
         }
     }
