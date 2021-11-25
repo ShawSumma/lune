@@ -1,6 +1,7 @@
 # for loop
 # does stuff
 # a comment
+var myVar = "hello"
 
 #|
     Demonstration of how to loop. This function loops

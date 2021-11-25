@@ -204,9 +204,8 @@ namespace Lune.Lexer
                     line++;
                     break;
                 case '|':
-                    if (matches('#') && inCommentBlock)
+                    if (matches('#'))
                     {
-                        WriteLine("exited a comment block");
                         inCommentBlock = false;
                     }
                     break;
@@ -215,7 +214,6 @@ namespace Lune.Lexer
                     {
                         // Multiline comment block
                         inCommentBlock = true;
-                        WriteLine("entered a comment block");
                     }
 
                     if (!inCommentBlock)
