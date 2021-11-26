@@ -1,0 +1,14 @@
+expression  = equality
+
+literal     = NUMBER | STRING | "null";
+equality    = comparison ( ("!=" | "==" ) comparison)*;
+comparison  = term ( (">" | ">=" | "<" | "<= ") term)*;
+
+# a term is zero or more factors
+term        = factor ( ("-" | "+") factor)*;
+factor      = unary ( ("*" | "/") unary)*;
+unary       = ("!" | "-") unary
+            | primary_expr;
+
+primary     = literal 
+            | "(" expression ")";
