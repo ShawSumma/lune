@@ -20,24 +20,13 @@ namespace Lune.Lexer
         Identifier, StringLit, CharLit, NumberLit,
 
         // Keywords
-        And, Or, If, Else, For, In, While, Case, Of, Var, Proc,
+        And, Or, If, Else, For, _In, While, Case, Of, Var, Proc,
 
         NewLine, EOF
     }
 
-    public record Token(TokenType type, string lexeme, object? literal, int line)
+    public record Token(TokenType Type, string Lexeme, object? Literal, int Line)
     {
-        public override string ToString() 
-        {
-            var items = new List<object>();
-            if (this.lexeme != "") {
-                items.Add(this.lexeme.Trim());
-            }
-            else if (this.literal != null) {
-                items.Add(this.literal);
-            }
-
-            return $"{this.type}({string.Join(',', items)})";
-        }
+        public override string ToString() => $"{Type}: {Lexeme} ('{Literal}')";
     }
 }

@@ -1,6 +1,9 @@
 # counter
 var i : int = 0
 
+#|
+ While loop example
+|#
 proc whileloop() {
     while i < 100 {
         write("while loop")
@@ -8,6 +11,9 @@ proc whileloop() {
     }
 }
 
+#|
+ For loop example 
+|#
 proc forloop() {
     for i = 0, 10 {
         write("for loop")

@@ -13,8 +13,15 @@ namespace Lune.AST.Nodes
 
     }
 
-    // 5 or "hello"
-    public record Literal(object value) : Expr
+    public record Unary(Token Op, Expr Right) : Expr
+    {
+        public override T Accept<T>(ITreeVisitor<T> visitor)
+        {
+            return visitor.VisitUnary(this);
+        }
+    }
+
+    public record Literal(object Value) : Expr
     {
         public override T Accept<T>(ITreeVisitor<T> visitor)
         {
@@ -22,8 +29,7 @@ namespace Lune.AST.Nodes
         }
     }
 
-    // 1 + 2
-    public record BinOp(Expr left, Token op, Expr right) : Expr
+    public record Binary(Expr Left, Token Op, Expr Right) : Expr
     {
         public override T Accept<T>(ITreeVisitor<T> visitor)
         {
@@ -31,8 +37,7 @@ namespace Lune.AST.Nodes
         }
     }
 
-    // (1 + 2)
-    public record Grouping(Expr expr) : Expr
+    public record Grouping(Expr Expr) : Expr
     {
         public override T Accept<T>(ITreeVisitor<T> visitor)
         {

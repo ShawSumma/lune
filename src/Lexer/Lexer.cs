@@ -9,7 +9,7 @@ using static Lune.ErrorReporting;
 namespace Lune.Lexer
 {
     /// <summary>
-    /// Lexical analyzer for Rune.
+    /// Lexical analyzer for Lune.
     /// </summary>
     public class Lexer
     {
@@ -18,6 +18,10 @@ namespace Lune.Lexer
         private bool inCommentBlock;
 
         private readonly string source;
+
+        private bool isAtEnd => current >= source.Length;
+        private string currentLexeme => source[start..current];
+
         private List<Token> tokens = new List<Token>();
 
         // Mapping of reserved words and their tokens
@@ -35,7 +39,7 @@ namespace Lune.Lexer
                 ["if"] = If,
                 ["else"] = Else,
                 ["for"] = For,
-                ["in"] = TokenType.In,
+                ["in"] = _In,
                 ["while"] = While,
                 ["case"] = Case,
                 ["of"] = Of,
@@ -44,21 +48,19 @@ namespace Lune.Lexer
             };
         }
 
-        private bool isAtEnd() => current >= source.Length;
-
         #region Helper functions
         private char advance()
         {
             //Console.WriteLine($"start = {start}, current = {current}");
 
-            if (!isAtEnd())
+            if (!isAtEnd)
                 return source[current++];
             return '\0';
         }
 
         private char peek()
         {
-            if (isAtEnd()) return '\0';
+            if (isAtEnd) return '\0';
             return source[current];
         }
 
@@ -71,7 +73,7 @@ namespace Lune.Lexer
 
         private bool matches(char expected)
         {
-            if (isAtEnd())
+            if (isAtEnd)
                 return false;
 
             if (source[current] != expected)
@@ -84,10 +86,7 @@ namespace Lune.Lexer
 
         private void addToken(TokenType type, object? literal = null)
         {
-            //Console.WriteLine($"start = {start}, current = {current}");
-
-            var text = source.Substring(start, current - start);
-            tokens.Add(new Token(type, "", literal, line));
+            tokens.Add(new Token(type, currentLexeme, literal, line));
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace Lune.Lexer
         /// <returns>List of all produced tokens</returns>
         public List<Token> Scan()
         {
-            while (!isAtEnd())
+            while (!isAtEnd)
             {
                 // We are at the beginning of the next lexeme
                 start = current;
@@ -106,7 +105,7 @@ namespace Lune.Lexer
             tokens.Add(new Token(TokenType.EOF, "", null, line));
 
             // As a kind of workaround to 01, check if the first token is a newline and remove it
-            if (tokens[0].type == NewLine)
+            if (tokens[0].Type == NewLine)
             {
                 tokens.Remove(tokens[0]);
             }
@@ -153,7 +152,7 @@ namespace Lune.Lexer
 
         private void scanChar()
         {
-            while (peek() != '\'' && !isAtEnd()) 
+            while (peek() != '\'' && !isAtEnd) 
             {
                 if (peek() == '\n')
                     line++;
@@ -161,7 +160,7 @@ namespace Lune.Lexer
                 advance();
             }
 
-            if (isAtEnd())
+            if (isAtEnd)
             {
                 Error(line, "Unterminated character literal");
                 return;
@@ -183,7 +182,7 @@ namespace Lune.Lexer
         private void scanString()
         {
             // TODO: add string interpolation
-            while (peek() != '"' && !isAtEnd())
+            while (peek() != '"' && !isAtEnd)
             {
                 if (peek() == '\n')
                     line++;
@@ -192,7 +191,7 @@ namespace Lune.Lexer
             }
 
 
-            if (isAtEnd())
+            if (isAtEnd)
             {
                 Error(line, "Unterminated string literal");
                 return;
@@ -238,7 +237,7 @@ namespace Lune.Lexer
                 case '\n':
                     if (peekNext(ahead: -2) != '\\') {
                         // FIXME: 01: Kinda works but it still appends NewLine even if the line is actually empty
-                        if (peek() != ' ' && tokens.Count == 0 || tokens[tokens.Count - 1].type != NewLine)
+                        if (peek() != ' ' && tokens.Count == 0 || tokens[tokens.Count - 1].Type != NewLine)
                         {
                             addToken(NewLine);
                         }
@@ -260,7 +259,7 @@ namespace Lune.Lexer
 
                     if (!inCommentBlock)
                     {
-                        while (peek() != '\n' && !isAtEnd()) advance();
+                        while (peek() != '\n' && !isAtEnd) advance();
                         if (peek() == '\n') advance();
                     }
 
@@ -284,7 +283,7 @@ namespace Lune.Lexer
                     else
                     {
                         // Inside a comment block, we ignore everything
-                        while (peek() != '|' && peekNext() != '#' && !isAtEnd())
+                        while (peek() != '|' && peekNext() != '#' && !isAtEnd)
                             advance();
                     }
                     break;

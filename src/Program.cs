@@ -11,10 +11,19 @@ namespace Lune
     public class Program
     {
         private static Lexer.Lexer? lexer;
+        private static Parser parser;
+
+        /// <summary>
+        /// Callback to let us know we have an error somewhere
+        /// </summary>
+        public static void ErrorCallback(Token token, string message) 
+        {
+            ErrorReporting.Error(token, message);
+        }
 
         public static void Main(string[] args)
         {
-            lexer = new Lexer.Lexer(File.ReadAllText("examples/vars.ln"));
+            lexer = new Lexer.Lexer(File.ReadAllText("examples/expr.ln"));
             var tokens = lexer.Scan();
 
             foreach (var t in tokens)
@@ -22,17 +31,11 @@ namespace Lune
                 Console.WriteLine(t);
             }
 
+            parser = new Parser(tokens, ErrorCallback);
             ASTPrinter printer = new ASTPrinter();
-            Console.WriteLine(
-                printer.VisitBinOp(
-                    new BinOp(
-                        new Literal("hello"),
-                        new Token(TokenType.Plus, "+", null, 0),
-                        new Literal(4)
-                )
-            ));
+            Expr? expr = parser.Parse();
 
-
+            Console.WriteLine(printer.Print(expr));
         }
     }
 }
