@@ -1,0 +1,16 @@
+# variables in lune
+var intvar : int = 0
+
+# strings are just char[]
+var strvar : str = "hello world"
+
+var charvar : char = 'a'
+
+# pointers will be added to support C interoperability
+var ptrvar : ptr int = addr(0)
+
+# example of defining a stdlib function memalloc
+proc memalloc(nbytes : int) : ptr int {
+    # for now just return 100
+    return 100
+}

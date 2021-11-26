@@ -190,6 +190,7 @@ namespace Lune.Lexer
                 case '-': addToken(Minus); break;
                 case '*': addToken(Star); break;
                 case '/': addToken(Slash); break;
+                case ':': addToken(Colon); break;
                 case '!': addToken(matches('=') ? BangEqual : Bang); break;
                 case '=': addToken(matches('=') ? EqualEqual : Equal); break;
                 case '<': addToken(matches('=') ? LessEqual : Less); break;
