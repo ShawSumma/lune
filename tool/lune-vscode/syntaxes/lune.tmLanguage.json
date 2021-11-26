@@ -37,7 +37,7 @@
       "patterns": [
         {
           "name": "keyword.control.lune",
-          "match": "\\b(and|or|if|else|for|in|while|case|of|var|proc|ptr|return|str|int|char)\\b"
+          "match": "\\b(and|or|if|else|for|in|while|case|of|var|proc|ptr|type|return|str|int|char)\\b"
         }
       ]
     },
@@ -45,8 +45,13 @@
       "patterns": [
         {
           "name": "comment.line.lune",
-          "begin": "#",
+          "begin": "#(?!\\|)",
           "end": "\n"
+        },
+        {
+          "name": "comment.block.lune",
+          "begin": "#\\|",
+          "end": "\\|#"
         }
       ]
     },

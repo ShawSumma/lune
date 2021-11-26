@@ -151,8 +151,38 @@ namespace Lune.Lexer
             addToken(NumberLit, Double.Parse(value));
         }
 
+        private void scanChar()
+        {
+            while (peek() != '\'' && !isAtEnd()) 
+            {
+                if (peek() == '\n')
+                    line++;
+                    
+                advance();
+            }
+
+            if (isAtEnd())
+            {
+                Error(line, "Unterminated character literal");
+                return;
+            }
+
+            advance();
+
+            string substring = source.Substring(start + 1, current - start - 2);
+            if (substring.Length > 1) 
+            {
+                Error(line, $"Too many characters in character literal");
+                return;
+            }
+
+            char value = char.Parse(substring);
+            addToken(CharLit, value);
+        }
+
         private void scanString()
         {
+            // TODO: add string interpolation
             while (peek() != '"' && !isAtEnd())
             {
                 if (peek() == '\n')
@@ -160,6 +190,7 @@ namespace Lune.Lexer
 
                 advance();
             }
+
 
             if (isAtEnd())
             {
@@ -196,6 +227,7 @@ namespace Lune.Lexer
                 case '<': addToken(matches('=') ? LessEqual : Less); break;
                 case '>': addToken(matches('=') ? GreaterEqual : Greater); break;
                 case '"': scanString(); break;
+                case '\'': scanChar(); break;
                 case '\\': break; // line continuation
                 case ' ':
 

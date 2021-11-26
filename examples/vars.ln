@@ -8,9 +8,3 @@ var charvar : char = 'a'
 
 # pointers will be added to support C interoperability
 var ptrvar : ptr int = addr(0)
-
-# example of defining a stdlib function memalloc
-proc memalloc(nbytes : int) : ptr int {
-    # for now just return 100
-    return 100
-}

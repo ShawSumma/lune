@@ -1,0 +1,16 @@
+# counter
+var i : int = 0
+
+proc whileloop() {
+    while i < 100 {
+        write("while loop")
+        i = i + 1
+    }
+}
+
+proc forloop() {
+    for i = 0, 10 {
+        write("for loop")
+        # no need to increment in for loop
+    }
+}

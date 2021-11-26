@@ -17,7 +17,7 @@ namespace Lune.Lexer
         Less, LessEqual,
 
         // Literals
-        Identifier, StringLit, NumberLit,
+        Identifier, StringLit, CharLit, NumberLit,
 
         // Keywords
         And, Or, If, Else, For, In, While, Case, Of, Var, Proc,
@@ -25,21 +25,8 @@ namespace Lune.Lexer
         NewLine, EOF
     }
 
-    public class Token
+    public record Token(TokenType type, string lexeme, object? literal, int line)
     {
-        public readonly TokenType type;
-        public readonly string lexeme;
-        public readonly object? literal;
-        public readonly int line;
-
-        public Token(TokenType type, string lexeme, object? literal, int line)
-        {
-            this.type = type;
-            this.lexeme = lexeme;
-            this.literal = literal;
-            this.line = line;
-        }
-
         public override string ToString() 
         {
             var items = new List<object>();
